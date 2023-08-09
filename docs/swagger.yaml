@@ -1,0 +1,68 @@
+basePath: /v1
+definitions:
+  presenter.GameBody:
+    properties:
+      kills:
+        additionalProperties:
+          type: integer
+        type: object
+      kills_by_means:
+        additionalProperties:
+          type: integer
+        type: object
+      players:
+        items:
+          type: string
+        type: array
+      total_kills:
+        type: integer
+    type: object
+  presenter.Response:
+    additionalProperties:
+      $ref: '#/definitions/presenter.GameBody'
+    type: object
+host: 0.0.0.0:8000
+info:
+  contact: {}
+  description: This is a Quake API server
+  title: Quake API
+  version: "1.0"
+paths:
+  /games:
+    get:
+      description: Get all games
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Response'
+      security:
+      - JWT: []
+      summary: Get all games
+      tags:
+      - games
+  /games/{gameID}:
+    get:
+      description: Get game given an ID
+      parameters:
+      - description: Game identifier
+        in: path
+        name: gameID
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Response'
+      security:
+      - JWT: []
+      summary: Get a single game
+      tags:
+      - games
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

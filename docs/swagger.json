@@ -1,0 +1,107 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a Quake API server",
+        "title": "Quake API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "0.0.0.0:8000",
+    "basePath": "/v1",
+    "paths": {
+        "/games": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get all games",
+                "tags": [
+                    "games"
+                ],
+                "summary": "Get all games",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/games/{gameID}": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "Get game given an ID",
+                "tags": [
+                    "games"
+                ],
+                "summary": "Get a single game",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Game identifier",
+                        "name": "gameID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "presenter.GameBody": {
+            "type": "object",
+            "properties": {
+                "kills": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "kills_by_means": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "players": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "total_kills": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.Response": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/presenter.GameBody"
+            }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
