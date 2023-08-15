@@ -60,6 +60,18 @@ paths:
       summary: Get a single game
       tags:
       - games
+  /healthcheck:
+    get:
+      description: Healthcheck endpoint
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Healthcheck endpoint
+      tags:
+      - healthcheck
 securityDefinitions:
   JWT:
     in: header

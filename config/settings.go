@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Settings represents the application settings.
 type Settings struct {
 	FileName          string `mapstructure:"FILE_NAME"`
 	ServerAddress     string `mapstructure:"SERVER_ADDRESS"`
@@ -18,6 +19,7 @@ type Settings struct {
 	ApiAuthSkipRoutes string `mapstructure:"API_AUTH_SKIP_ROUTES"`
 }
 
+// Load reads the configuration file and sets the application settings.
 func Load() {
 	viper.SetConfigName("quake")
 	viper.SetConfigFile(".env")

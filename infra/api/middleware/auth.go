@@ -9,6 +9,9 @@ import (
 	jwt "gopkg.in/dgrijalva/jwt-go.v3"
 )
 
+// JWTAuthentication is a middleware function that handles JWT authentication for API routes.
+// It checks if the request URL path is not in the list of routes to skip authentication and if the request contains a valid JWT token.
+// If the token is invalid or not provided, it returns a 401 Unauthorized response.
 func JWTAuthentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		routes := viper.GetString("API_AUTH_SKIP_ROUTES")

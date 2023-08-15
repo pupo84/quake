@@ -13,18 +13,22 @@ import (
 	"go.uber.org/zap"
 )
 
+// FileRepositorier is the interface that wraps the basic Read method
 type FileRepositorier interface {
 	Read(ctx context.Context) ([]string, string, error)
 }
 
+// FileRepository is the struct that implements the FileRepositorier interface
 type FileRepository struct {
 	logger *zap.SugaredLogger
 }
 
+// NewFileRepository returns a new FileRepository
 func NewFileRepository(logger *zap.SugaredLogger) *FileRepository {
 	return &FileRepository{logger}
 }
 
+// Read returns the data and the hash of the file
 func (fr *FileRepository) Read(ctx context.Context) ([]string, string, error) {
 	fileName := viper.GetString("FILE_NAME")
 

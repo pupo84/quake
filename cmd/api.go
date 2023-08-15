@@ -14,10 +14,12 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// APIServer is the struct that represents the HTTP server
 type APIServer struct {
 	server *gin.Engine
 }
 
+// NewAPIServer returns a new HTTP server
 func NewAPIServer() *APIServer {
 	config.Load()
 
@@ -51,6 +53,7 @@ func NewAPIServer() *APIServer {
 	return &APIServer{server}
 }
 
+// Run starts the HTTP server
 func (a *APIServer) Run() {
 	address := viper.GetString("SERVER_ADDRESS")
 	port := viper.GetInt("SERVER_PORT")

@@ -7,6 +7,8 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// NewLogger creates a new instance of a SugaredLogger with a JSON encoder and an atomic level set to Info.
+// The logger is configured to encode timestamps in ISO8601 format and the key for the timestamp is "timestamp".
 func NewLogger() *zap.SugaredLogger {
 	atomic := zap.NewAtomicLevel()
 

@@ -14,17 +14,20 @@ import (
 	"go.uber.org/zap"
 )
 
+// Controller is the interface that wraps the Get and GetByID methods
 type Controller interface {
 	Get(c *gin.Context)
 	GetByID(c *gin.Context, id int)
 }
 
+// GameController is the struct that implements the Controller interface
 type GameController struct {
 	ctx     context.Context
 	logger  *zap.SugaredLogger
 	useCase *usecase.GameUsecase
 }
 
+// NewGameController returns a new GameController
 func NewGameController(gameUseCase *usecase.GameUsecase) *GameController {
 	return &GameController{
 		ctx:     context.Background(),

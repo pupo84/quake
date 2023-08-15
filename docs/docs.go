@@ -68,6 +68,24 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/healthcheck": {
+            "get": {
+                "description": "Healthcheck endpoint",
+                "tags": [
+                    "healthcheck"
+                ],
+                "summary": "Healthcheck endpoint",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
