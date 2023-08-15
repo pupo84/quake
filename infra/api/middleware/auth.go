@@ -18,32 +18,36 @@ func JWTAuthentication() gin.HandlerFunc {
 
 		for _, route := range strings.Split(routes, ",") {
 			if route != c.Request.URL.Path && !strings.Contains(c.Request.URL.Path, "/docs/") {
-				var token string
-				bearerToken := c.Request.Header.Get("Authorization")
+				authorization := c.Request.Header.Get("Authorization")
 
-				if len(strings.Split(bearerToken, " ")) == 2 {
-					token = strings.Split(bearerToken, " ")[1]
-
-					_, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-						if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-							return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-						}
-						return []byte(viper.GetString("API_SECRET")), nil
-					})
-
-					if err != nil {
-						c.JSON(401, gin.H{
-							"message": "Not Authorized to perform this request",
-							"error":   err.Error(),
-						})
-						c.Abort()
-						return
-					}
-
-				} else if len(bearerToken) == 0 {
+				if len(authorization) == 0 {
 					c.JSON(401, gin.H{
 						"message": "Not Authorized to perform this request",
 						"error":   "No token provided",
+					})
+					c.Abort()
+					return
+				}
+
+				var token string
+
+				if strings.Contains(authorization, "Bearer") {
+					token = strings.Split(authorization, " ")[1]
+				} else {
+					token = authorization
+				}
+
+				_, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+					if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+						return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+					}
+					return []byte(viper.GetString("API_SECRET")), nil
+				})
+
+				if err != nil {
+					c.JSON(401, gin.H{
+						"message": "Not Authorized to perform this request",
+						"error":   err.Error(),
 					})
 					c.Abort()
 					return
