@@ -25,9 +25,14 @@ type CacheRepository struct {
 // NewCacheRepository returns a new CacheRepository
 func NewCacheRepository(logger *zap.SugaredLogger) *CacheRepository {
 	redis := redis.NewClient(&redis.Options{
-		Addr: fmt.Sprintf("%s:%d", viper.GetString("REDIS_ADDRESS"), viper.GetInt("REDIS_PORT")),
+		Addr: fmt.Sprintf("%s:%d", viper.GetString("REDIS_SERVER"), viper.GetInt("REDIS_PORT")),
 		DB:   viper.GetInt("REDIS_DB"),
 	})
+
+	if _, err := redis.Ping(context.Background()).Result(); err != nil {
+		logger.Fatalf("Error connecting to Redis: %s", err)
+	}
+
 	return &CacheRepository{logger: logger, redis: redis}
 }
 

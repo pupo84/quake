@@ -1,4 +1,5 @@
 BINARY_NAME=quake
+VERSION=v0.0.1
 
 build:
 	go build -o bin/$(BINARY_NAME) 
@@ -33,10 +34,10 @@ coverage:
 	go tool cover -html=coverage.out
 
 docker-build:
-	docker build -t quake:v0.0.1 .
+	docker build -t $(BINARY_NAME):$(VERSION) .
 
 docker-run: docker-build
 	docker compose up -d
 
 docker-stop:
-	docker compose down
+	docker compose down --remove-orphans
