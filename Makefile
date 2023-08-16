@@ -31,3 +31,12 @@ test:
 coverage:
 	go test -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
+
+docker-build:
+	docker build -t quake:v0.0.1 .
+
+docker-run: docker-build
+	docker compose up -d
+
+docker-stop:
+	docker compose down
