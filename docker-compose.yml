@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  game-network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - game-network
+
+  app:
+    image: quake:v0.0.1
+    environment:
+      FILE_NAME: log.txt
+      SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: 8000
+      REDIS_SERVER: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      GIN_MODE: release
+      API_SECRET: quake
+      API_AUTH_SKIP_ROUTES: /v1/healthcheck
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    networks:
+      - game-network
