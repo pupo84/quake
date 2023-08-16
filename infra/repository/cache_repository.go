@@ -14,12 +14,14 @@ import (
 type CacheRepositorier interface {
 	Get(ctx context.Context, key string) (string, error)
 	Set(ctx context.Context, key string, value string) error
+	IsAlive() bool
 }
 
 // CacheRepository is the struct that implements the CacheRepositorier interface
 type CacheRepository struct {
-	logger *zap.SugaredLogger
-	redis  *redis.Client
+	logger    *zap.SugaredLogger
+	redis     *redis.Client
+	connected bool
 }
 
 // NewCacheRepository returns a new CacheRepository
@@ -29,11 +31,14 @@ func NewCacheRepository(logger *zap.SugaredLogger) *CacheRepository {
 		DB:   viper.GetInt("REDIS_DB"),
 	})
 
+	connected := true
+
 	if _, err := redis.Ping(context.Background()).Result(); err != nil {
-		logger.Fatalf("Error connecting to Redis: %s", err)
+		logger.Warnf("Error connecting to Redis: %s", err)
+		connected = false
 	}
 
-	return &CacheRepository{logger: logger, redis: redis}
+	return &CacheRepository{logger: logger, redis: redis, connected: connected}
 }
 
 // Get returns the value of a given key
@@ -44,4 +49,8 @@ func (r *CacheRepository) Get(ctx context.Context, key string) (string, error) {
 // Set sets the value of a given key
 func (r *CacheRepository) Set(ctx context.Context, key string, value string) error {
 	return r.redis.Set(ctx, key, value, 0).Err()
+}
+
+func (r *CacheRepository) IsAlive() bool {
+	return r.connected
 }

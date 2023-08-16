@@ -35,6 +35,11 @@ func (m *mockCacheRepository) Set(ctx context.Context, key string, value string)
 	return args.Error(0)
 }
 
+func (m *mockCacheRepository) IsAlive() bool {
+	args := m.Called()
+	return args.Bool(0)
+}
+
 func TestGameUsecase_Go(t *testing.T) {
 	logger := zap.NewNop().Sugar()
 	ctx := context.Background()
@@ -63,6 +68,7 @@ func TestGameUsecase_Go(t *testing.T) {
 		usecase := usecase.NewGameUsecase(logger, fileRepo, cacheRepo)
 
 		fileRepo.On("Read", ctx).Return([]string{}, "", errors.New("Could not parse games from logfile"))
+		cacheRepo.On("IsAlive").Return(true)
 
 		games, err := usecase.Go(ctx)
 
@@ -77,6 +83,7 @@ func TestGameUsecase_Go(t *testing.T) {
 
 		fileRepo.On("Read", ctx).Return(gameData, expectedHash, nil)
 		cacheRepo.On("Get", ctx, expectedHash).Return("[{\"ID\":1,\"Kills\":3,\"Players\":[\"Player1\",\"Player2\"],\"KillsByPlayers\":{\"Player1\":0,\"Player2\":1},\"KillsByCause\":{\"MOD_RAILGUN\":1,\"MOD_TRIGGER_HURT\":2}}]", nil)
+		cacheRepo.On("IsAlive").Return(true)
 
 		games, err := usecase.Go(ctx)
 
@@ -92,6 +99,7 @@ func TestGameUsecase_Go(t *testing.T) {
 		fileRepo.On("Read", ctx).Return(gameData, expectedHash, nil)
 		cacheRepo.On("Get", ctx, expectedHash).Return("", errors.New("Cache miss"))
 		cacheRepo.On("Set", ctx, expectedHash, mock.Anything).Return(nil)
+		cacheRepo.On("IsAlive").Return(true)
 
 		games, err := usecase.Go(ctx)
 
@@ -107,6 +115,7 @@ func TestGameUsecase_Go(t *testing.T) {
 		fileRepo.On("Read", ctx).Return(gameData, expectedHash, nil)
 		cacheRepo.On("Get", ctx, expectedHash).Return("", errors.New("Cache miss"))
 		cacheRepo.On("Set", ctx, expectedHash, mock.Anything).Return(errors.New("Could not save to cache"))
+		cacheRepo.On("IsAlive").Return(true)
 
 		games, err := usecase.Go(ctx)
 
@@ -121,6 +130,7 @@ func TestGameUsecase_Go(t *testing.T) {
 
 		fileRepo.On("Read", ctx).Return(gameData, expectedHash, nil)
 		cacheRepo.On("Get", ctx, expectedHash).Return("{}", nil)
+		cacheRepo.On("IsAlive").Return(true)
 
 		_, err := usecase.Go(ctx)
 

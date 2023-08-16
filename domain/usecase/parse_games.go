@@ -34,14 +34,16 @@ func (uc *GameUsecase) Go(ctx context.Context) (entity.Games, error) {
 		return nil, err
 	}
 
-	if value, err := uc.cacheRepository.Get(ctx, hash); err == nil {
-		uc.logger.Infof("Cache hit for hash %s", hash)
-		games := entity.Games{}
-		err := json.Unmarshal([]byte(value), &games)
-		if err != nil {
-			return nil, err
+	if uc.cacheRepository.IsAlive() {
+		if value, err := uc.cacheRepository.Get(ctx, hash); err == nil {
+			uc.logger.Infof("Cache hit for hash %s", hash)
+			games := entity.Games{}
+			err := json.Unmarshal([]byte(value), &games)
+			if err != nil {
+				return nil, err
+			}
+			return games, nil
 		}
-		return games, nil
 	}
 
 	games := make(entity.Games, 0)
@@ -79,10 +81,12 @@ func (uc *GameUsecase) Go(ctx context.Context) (entity.Games, error) {
 		}
 	}
 
-	var data []byte
-	if data, err = json.Marshal(games); err == nil {
-		uc.logger.Infof("Saving games to cache with hash %s", hash)
-		uc.cacheRepository.Set(ctx, hash, string(data))
+	if uc.cacheRepository.IsAlive() {
+		var data []byte
+		if data, err = json.Marshal(games); err == nil {
+			uc.logger.Infof("Saving games to cache with hash %s", hash)
+			uc.cacheRepository.Set(ctx, hash, string(data))
+		}
 	}
 
 	return games, nil
