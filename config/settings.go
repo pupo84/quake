@@ -8,15 +8,18 @@ import (
 
 // Settings represents the application settings.
 type Settings struct {
-	FileName          string `mapstructure:"FILE_NAME"`
-	ServerAddress     string `mapstructure:"SERVER_ADDRESS"`
-	ServerPort        int    `mapstructure:"SERVER_PORT"`
-	RedisAddress      string `mapstructure:"REDIS_ADDRESS"`
-	RedisPort         int    `mapstructure:"REDIS_PORT"`
-	RedisDB           int    `mapstructure:"REDIS_DB"`
-	GinMode           string `mapstructure:"GIN_MODE"`
-	ApiSecret         string `mapstructure:"API_SECRET"`
-	ApiAuthSkipRoutes string `mapstructure:"API_AUTH_SKIP_ROUTES"`
+	ServiceName               string `mapstructure:"SERVICE_NAME"`
+	Environment               string `mapstructure:"ENVIRONMENT"`
+	FileName                  string `mapstructure:"FILE_NAME"`
+	ServerAddress             string `mapstructure:"SERVER_ADDRESS"`
+	ServerPort                int    `mapstructure:"SERVER_PORT"`
+	RedisAddress              string `mapstructure:"REDIS_ADDRESS"`
+	RedisPort                 int    `mapstructure:"REDIS_PORT"`
+	RedisDB                   int    `mapstructure:"REDIS_DB"`
+	GinMode                   string `mapstructure:"GIN_MODE"`
+	ApiSecret                 string `mapstructure:"API_SECRET"`
+	ApiAuthSkipRoutes         string `mapstructure:"API_AUTH_SKIP_ROUTES"`
+	OpenTelemetryCollectorUrl string `mapstructure:"OPEN_TELEMETRY_COLLECTOR_URL"`
 }
 
 // Load reads the configuration file and sets the application settings.
