@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "a338610b-05b0-43eb-94f7-3e2273b8f8bd",
+		"name": "CloudWalk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26614212"
+	},
+	"item": [
+		{
+			"name": "GetGames",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.e30.0cF9K0NMagtEMofti9djoI1Wv4-n_t-pIPOTznPeMjs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://0.0.0.0:8000/v1/games",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"v1",
+						"games"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetGameByID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.e30.0cF9K0NMagtEMofti9djoI1Wv4-n_t-pIPOTznPeMjs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://0.0.0.0:8000/v1/games/2",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"v1",
+						"games",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
